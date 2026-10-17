@@ -1,0 +1,2 @@
+# El programa no necesita librerías externas; esto es solo para las pruebas.
+pytest>=8.0
