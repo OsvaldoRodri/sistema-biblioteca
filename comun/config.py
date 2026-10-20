@@ -1,1 +1,11 @@
 """Constantes del sistema: límite de préstamos y días de vigencia por tipo de usuario, multa por día. (T04)"""
+
+LIMITE_PRESTAMOS_ESTUDIANTE = 3
+LIMITE_PRESTAMOS_ADMINISTRATIVO = 4
+LIMITE_PRESTAMOS_PROFESOR = 5
+
+DIAS_VIGENCIA_ESTUDIANTE = 7
+DIAS_VIGENCIA_ADMINISTRATIVO = 10
+DIAS_VIGENCIA_PROFESOR = 15
+
+MULTA_POR_DIA = 10
