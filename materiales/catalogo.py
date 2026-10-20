@@ -2,6 +2,7 @@
 from materiales.modelos import Material, Libro
 from comun.excepciones import DatoInvalido, NoEncontrado
 
+import unicodedata
 
 class Catalogo:
     """Guarda todos los materiales que se van registrando."""
@@ -42,9 +43,47 @@ class Catalogo:
         raise NoEncontrado(f"Material con el id {id_material} no encontrado")
 
     def buscar(self, texto: str, campo: str) -> list[Material]:
-        # campo puede ser "titulo", "autor" o "isbn"; busca parcial y sin mayúsculas (T09)
-        raise NotImplementedError
+        # Valida que el campo ingresado sea únicamente uno de los tres permitidos
+        if campo not in ("titulo", "autor", "isbn"):
+            raise DatoInvalido(f"Campo inválido: {campo}")
+
+        resultados = []
+
+        for material in self._materiales:
+            # Obtiene el valor del atributo de forma dinámica (ej: material.titulo o material.autor)
+            # Si el atributo no existe, asigna un texto vacío "" para evitar que el programa falle
+            valor = getattr(material, campo, "")
+
+            # Compara el texto buscado con el valor del material
+            # .lower() convierte ambos textos a minúsculas para ignorar las diferencias de mayúsculas
+            # El operador 'in' verifica si el texto ingresado está contenido de forma parcial en el valor
+            if texto.lower() in valor.lower():
+                # Si hay coincidencia, agrega el objeto material a la lista de resultados
+                resultados.append(material)
+
+        # Devuelve la lista con los resultados encontrados
+        return resultados
+        
 
     def disponibilidad(self, id_material: int) -> str:
-        # Dice si el material está "Disponible" o "Prestado" (T10)
-        raise NotImplementedError
+        # Devolvemos el etado al obtener el material con obtener() usando el id
+        material = self.obtener(id_material)
+        
+        estado = "Disponible"
+        if not material.esta_disponible():
+            estado = "Prestado"
+        
+        return estado
+
+
+
+    def _sin_acentos(texto: str) -> str:
+        """Quita acentos"""
+        # Descompone el texto en formato NFD. Esto separa las letras de sus acentos
+        # Por ejemplo, la 'á' se convierte en una 'a' normal más un carácter de acento independiente
+        nfd = unicodedata.normalize("NFD", texto)
+        
+        # Recorre cada carácter en el texto descompuesto y evalúa su categoría
+        # 'Mn' representa a los acentos e indicaciones flotantes (Mark, Nonspacing)
+        # Filtra el texto guardando solo las letras que NO sean acentos y las une con .join()
+        return "".join(c for c in nfd if unicodedata.category(c) != "Mn")
