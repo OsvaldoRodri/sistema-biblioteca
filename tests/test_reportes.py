@@ -9,6 +9,7 @@ from materiales.modelos import Libro
 from usuarios.modelos import Estudiante
 from prestamos.modelos import Prestamo
 from reportes.reportes import Reportes
+from reportes.menu import menu_reportes
 
 
 class ServicioFalso:
@@ -132,3 +133,50 @@ def test_multas_acumuladas_no_junta_a_usuarios_con_el_mismo_nombre():
 
     assert por_usuario == {"Ana López (ID 1)": 30, "Ana López (ID 99)": 20}
     assert total == 50
+
+
+def entradas(valores):
+    """Da las respuestas de input() una por una, como si el usuario las tecleara."""
+    respuestas = iter(valores)
+    return lambda _mensaje="": next(respuestas)
+
+
+def test_menu_mas_prestados_muestra_resultado(monkeypatch, capsys):
+    prestamos = [hacer_prestamo(1, ana, libro1, date(2026, 1, 1), date(2026, 1, 8))]
+    reportes = Reportes(ServicioFalso(prestamos))
+    monkeypatch.setattr("builtins.input", entradas(["1", "5", "4"]))
+
+    menu_reportes(reportes)
+
+    salida = capsys.readouterr().out
+    assert "Pedro Páramo" in salida
+
+
+def test_menu_n_invalida_no_truena(monkeypatch, capsys):
+    reportes = Reportes(ServicioFalso([]))
+    monkeypatch.setattr("builtins.input", entradas(["1", "no-soy-numero", "4"]))
+
+    menu_reportes(reportes)  # no debe lanzar ValueError ni nada parecido
+
+    salida = capsys.readouterr().out
+    assert "número" in salida
+
+
+def test_menu_opcion_invalida_no_truena(monkeypatch, capsys):
+    reportes = Reportes(ServicioFalso([]))
+    monkeypatch.setattr("builtins.input", entradas(["9", "4"]))
+
+    menu_reportes(reportes)
+
+    salida = capsys.readouterr().out
+    assert "inválida" in salida.lower()
+
+
+def test_menu_multas_sin_nada_que_mostrar(monkeypatch, capsys):
+    reportes = Reportes(ServicioFalso([]))
+    monkeypatch.setattr("builtins.input", entradas(["3", "4"]))
+
+    menu_reportes(reportes)
+
+    salida = capsys.readouterr().out
+    assert "Nadie debe multas" in salida
