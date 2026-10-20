@@ -22,7 +22,7 @@ def test_libro_funcionalidad_y_descripcion():
         autor="Gabriel García Márquez",
         anio=1967,
         isbn="978-030-7474728",
-        editorial="Subamericana",
+        editorial="Sudamericana",
     )
     
     # Probar estado inicial (Debe ser True, ya que el valor por defecto se asigno que fuera True)
@@ -43,7 +43,7 @@ def test_libro_funcionalidad_y_descripcion():
     # Probar método abstracto (descripcion)
     desc = libro.descripcion()
     assert "[Libro]" in desc
-    assert "Subamericana" in desc
+    assert "Sudamericana" in desc
 
 def test_revista_funcionalidad_y_descripcion():
   """Prueba la creación de una Revista y su descripción única."""

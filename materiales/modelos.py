@@ -69,7 +69,7 @@ class Libro(Material):
         estado: str = "Disponible"
         
         if not self._disponible :
-            estado = "Pretado"
+            estado = "Prestado"
             
         return (
             f"[Libro] {self.titulo} - {self.autor} ({self.anio}) | "
@@ -99,7 +99,7 @@ class Revista(Material):
         estado: str = "Disponible"
         
         if not self._disponible :
-            estado = "Pretado"
+            estado = "Prestado"
             
         return (
             f"[Revista] {self.titulo} (Vol. {self.volumen}, Nº {self.numero}) - "
@@ -130,7 +130,7 @@ class Tesis(Material):
         estado: str = "Disponible"
         
         if not self._disponible :
-            estado = "Pretado"
+            estado = "Prestado"
         
         return (
             f"[Tesis de {self.grado}] {self.titulo} por {self.autor} ({self.anio}) | "
