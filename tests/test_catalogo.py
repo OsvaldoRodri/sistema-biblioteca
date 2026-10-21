@@ -4,8 +4,8 @@ from materiales.modelos import Libro, Revista
 from materiales.catalogo import Catalogo
 from comun.excepciones import DatoInvalido, NoEncontrado
 
-def libro(isbn="978-607-16-0293-6", titulo="Pedro Páramo"):
-    return Libro(None, titulo=titulo, autor="Juan Rulfo", anio=1955, isbn=isbn, editorial="FCE")
+def libro(isbn="978-607-16-0293-6", titulo="Pedro Páramo", autor="Juan Rulfo"):
+    return Libro(None, titulo=titulo, autor=autor, anio=1955, isbn=isbn, editorial="FCE")
 
 
 # T08: registrar y obtener

@@ -23,11 +23,12 @@ class Catalogo:
                 if isinstance(m, Libro) and m.isbn == material.isbn:
                     raise DatoInvalido(f"ISBN repetido: {material.isbn}")
                 
-        """Verifica si el id está vacío para asignar uno automaticamente."""
+        # Verifica si el id está vacío para asignar uno automaticamente.
+        # Se usa max() para obtener el id más alto e incrementarle +1.
         if material.id is None:
-            material.id = len(self._materiales) + 1
+            material.id = max((m.id for m in self._materiales), default=0) + 1
         
-        """Guardar el material en la lista"""
+        # Guardar el material en la lista
         self._materiales.append(material)
 
     def obtener(self, id_material: int) -> Material:
@@ -57,7 +58,7 @@ class Catalogo:
             # Compara el texto buscado con el valor del material
             # .lower() convierte ambos textos a minúsculas para ignorar las diferencias de mayúsculas
             # El operador 'in' verifica si el texto ingresado está contenido de forma parcial en el valor
-            if texto.lower() in valor.lower():
+            if self._sin_acentos(texto.lower()) in self._sin_acentos(valor.lower()):
                 # Si hay coincidencia, agrega el objeto material a la lista de resultados
                 resultados.append(material)
 
@@ -77,6 +78,7 @@ class Catalogo:
 
 
 
+    @staticmethod
     def _sin_acentos(texto: str) -> str:
         """Quita acentos"""
         # Descompone el texto en formato NFD. Esto separa las letras de sus acentos

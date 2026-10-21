@@ -69,7 +69,7 @@ def menu_materiales(catalogo: Catalogo) -> None:
             elif opcion == "5":
                 # Pide el id y muestra si está Disponible o Prestado.
                 id_material = int(input("Id del material: "))
-                print(f"El material se encuentra disponible: {catalogo.disponibilidad(id_material)}")
+                print(f"Estado: {catalogo.disponibilidad(id_material)}")
             elif opcion == "6":
                 # Sale del ciclo y termina el menú.
                 break
