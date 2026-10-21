@@ -79,3 +79,73 @@ def test_usuario_no_encontrado():
         assert False, "Debió indicar que el usuario no existe."
     except NoEncontrado:
         pass
+
+
+from usuarios.menu import menu_usuarios
+
+
+def test_menu_registra_estudiante_y_sale(monkeypatch, capsys):
+    respuestas = iter([
+        "1", "10", "Ana Lopez", "ana@ejemplo.com",
+        "5",
+    ])
+    monkeypatch.setattr("builtins.input", lambda _: next(respuestas))
+
+    padron = Padron()
+    menu_usuarios(padron)
+
+    assert padron.obtener(10).nombre == "Ana Lopez"
+    assert "Estudiante registrado con id 10" in capsys.readouterr().out
+
+
+def test_menu_registra_los_tres_tipos(monkeypatch, capsys):
+    respuestas = iter([
+        "1", "10", "Ana Lopez", "ana@ejemplo.com",
+        "2", "20", "Luis Perez", "luis@ejemplo.com",
+        "3", "30", "Marta Ruiz", "marta@ejemplo.com",
+        "5",
+    ])
+    monkeypatch.setattr("builtins.input", lambda _: next(respuestas))
+
+    padron = Padron()
+    menu_usuarios(padron)
+
+    assert isinstance(padron.obtener(10), Estudiante)
+    assert isinstance(padron.obtener(20), Profesor)
+    assert isinstance(padron.obtener(30), Administrativo)
+
+
+def test_menu_consulta_usuario(monkeypatch, capsys):
+    respuestas = iter(["4", "1", "5"])
+    monkeypatch.setattr("builtins.input", lambda _: next(respuestas))
+
+    padron = Padron()
+    padron.registrar(Estudiante(1, "Ana Lopez", "ana@ejemplo.com"))
+
+    menu_usuarios(padron)
+    salida = capsys.readouterr().out
+
+    assert "Nombre: Ana Lopez" in salida
+    assert "Límite de préstamos: 3" in salida
+
+
+def test_menu_id_inexistente_no_truena(monkeypatch, capsys):
+    respuestas = iter(["4", "999", "5"])
+    monkeypatch.setattr("builtins.input", lambda _: next(respuestas))
+
+    menu_usuarios(Padron())
+    salida = capsys.readouterr().out
+
+    assert "Error:" in salida
+    assert "999" in salida
+
+
+def test_menu_opcion_y_dato_numerico_invalidos(monkeypatch, capsys):
+    respuestas = iter(["9", "1", "letras", "5"])
+    monkeypatch.setattr("builtins.input", lambda _: next(respuestas))
+
+    menu_usuarios(Padron())
+    salida = capsys.readouterr().out
+
+    assert "Opción no válida" in salida
+    assert "Dato numérico inválido" in salida
