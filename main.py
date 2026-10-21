@@ -21,28 +21,33 @@ def main() -> None:
     for usuario in crear_usuarios_ejemplo():
         padron.registrar(usuario)
 
-    while True:
-        print("\n=== Sistema de Biblioteca ===")
-        print("1. Materiales")
-        print("2. Usuarios")
-        print("3. Préstamos")
-        print("4. Reportes")
-        print("5. Salir")
-        opcion = input("Elige una opción: ")
+    # Ctrl+C o Ctrl+D (EOF) salen con un mensaje, no con un traceback (T24),
+    # sin importar en qué menú (incluso uno de los submenús) esté parado.
+    try:
+        while True:
+            print("\n=== Sistema de Biblioteca ===")
+            print("1. Materiales")
+            print("2. Usuarios")
+            print("3. Préstamos")
+            print("4. Reportes")
+            print("5. Salir")
+            opcion = input("Elige una opción: ")
 
-        if opcion == "1":
-            menu_materiales(catalogo)
-        elif opcion == "2":
-            menu_usuarios(padron)
-        elif opcion == "3":
-            menu_prestamos(servicio)
-        elif opcion == "4":
-            menu_reportes(reportes)
-        elif opcion == "5":
-            print("¡Hasta luego!")
-            break
-        else:
-            print("Opción no válida")
+            if opcion == "1":
+                menu_materiales(catalogo)
+            elif opcion == "2":
+                menu_usuarios(padron)
+            elif opcion == "3":
+                menu_prestamos(servicio)
+            elif opcion == "4":
+                menu_reportes(reportes)
+            elif opcion == "5":
+                print("¡Hasta luego!")
+                break
+            else:
+                print("Opción no válida")
+    except (KeyboardInterrupt, EOFError):
+        print("\n¡Hasta luego!")
 
 
 if __name__ == "__main__":
