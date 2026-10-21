@@ -1,8 +1,5 @@
 """Usuario (abstracta), Estudiante, Profesor y Administrativo. (T04)"""
 
-
-"""Usuario abstracto y sus tipos concretos."""
-
 from abc import ABC, abstractmethod
 
 from comun import config

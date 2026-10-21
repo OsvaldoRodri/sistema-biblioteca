@@ -1,5 +1,5 @@
-"""Padrón para registrar y consultar usuarios.(T07, T12–T13)"""
 
+"""Padrón para registrar y consultar usuarios."""
 
 from comun.excepciones import DatoInvalido, NoEncontrado
 
